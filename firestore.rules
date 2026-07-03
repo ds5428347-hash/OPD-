@@ -1,0 +1,108 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128;
+    }
+    
+    function incoming() {
+      return request.resource.data;
+    }
+    
+    function existing() {
+      return resource.data;
+    }
+
+    // Entity validations
+    function isValidUser(data) {
+      return data.keys().hasAll(['mobileNumber', 'userName'])
+        && data.mobileNumber is string
+        && data.userName is string;
+    }
+
+    function isValidClaim(data) {
+      return data.keys().hasAll(['id', 'hospitalName', 'billAmount', 'status'])
+        && data.id is string
+        && data.hospitalName is string
+        && data.billAmount is number
+        && data.status is string;
+    }
+
+    function isValidPayment(data) {
+      return data.keys().hasAll(['id', 'planName', 'amount', 'orderId', 'paymentId'])
+        && data.id is string
+        && data.planName is string
+        && data.amount is number
+        && data.orderId is string
+        && data.paymentId is string;
+    }
+
+    function isValidDietPlan(data) {
+      return data.keys().hasAll(['id', 'goal', 'dietaryType', 'calories'])
+        && data.id is string
+        && data.goal is string
+        && data.dietaryType is string
+        && data.calories is number;
+    }
+
+    function isValidNotification(data) {
+      return data.keys().hasAll(['id', 'title', 'message', 'date', 'read'])
+        && data.id is string
+        && data.title is string
+        && data.message is string
+        && data.date is string
+        && data.read is bool;
+    }
+
+    function isValidHospital(data) {
+      return data.keys().hasAll(['id', 'name', 'address', 'city'])
+        && data.id is string
+        && data.name is string
+        && data.address is string
+        && data.city is string;
+    }
+
+    // Collection matches
+    match /users/{userId} {
+      allow read: if true;
+      allow create, update: if isValidId(userId) && isValidUser(incoming());
+      allow delete: if false;
+    }
+
+    match /claims/{claimId} {
+      allow read: if true;
+      allow create, update: if isValidId(claimId) && isValidClaim(incoming());
+      allow delete: if false;
+    }
+
+    match /payments/{paymentId} {
+      allow read: if true;
+      allow create, update: if isValidId(paymentId) && isValidPayment(incoming());
+      allow delete: if false;
+    }
+
+    match /diet_plans/{planId} {
+      allow read: if true;
+      allow create, update: if isValidId(planId) && isValidDietPlan(incoming());
+      allow delete: if false;
+    }
+
+    match /notifications/{notifId} {
+      allow read: if true;
+      allow create, update: if isValidId(notifId) && isValidNotification(incoming());
+      allow delete: if false;
+    }
+
+    match /hospitals/{hospitalId} {
+      allow read: if true;
+      allow create, update: if isValidId(hospitalId) && isValidHospital(incoming());
+      allow delete: if false;
+    }
+  }
+}

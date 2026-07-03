@@ -1,0 +1,6 @@
+{
+  "name": "Gemini Studio Companion",
+  "description": "A premium full-stack developer workspace for prompt engineering, JSON schema generation, and code assistant tools powered by the Gemini API.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

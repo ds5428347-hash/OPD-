@@ -1,0 +1,127 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "User account information, wallet balance, and subscribed plan",
+      "type": "object",
+      "properties": {
+        "mobileNumber": { "type": "string" },
+        "userName": { "type": "string" },
+        "userPlan": { "type": "string" },
+        "opdLimit": { "type": "number" },
+        "opdRemaining": { "type": "number" },
+        "virtualWalletBalance": { "type": "number" },
+        "joinedAt": { "type": "string" }
+      },
+      "required": ["mobileNumber", "userName"]
+    },
+    "Claim": {
+      "title": "OPD Claim",
+      "description": "Claim submission invoice details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "hospitalName": { "type": "string" },
+        "doctorName": { "type": "string" },
+        "billAmount": { "type": "number" },
+        "claimAmount": { "type": "number" },
+        "receiptName": { "type": "string" },
+        "status": { "type": "string", "enum": ["Pending", "Approved", "Rejected"] },
+        "date": { "type": "string" },
+        "mobileNumber": { "type": "string" }
+      },
+      "required": ["id", "hospitalName", "billAmount", "status"]
+    },
+    "Payment": {
+      "title": "Payment Order",
+      "description": "Premium policy tier purchase logs",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "planName": { "type": "string" },
+        "amount": { "type": "number" },
+        "orderId": { "type": "string" },
+        "paymentId": { "type": "string" },
+        "date": { "type": "string" },
+        "mobileNumber": { "type": "string" }
+      },
+      "required": ["id", "planName", "amount", "orderId", "paymentId"]
+    },
+    "DietPlan": {
+      "title": "AI Diet Plan",
+      "description": "Generated diet plan recommendation",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "goal": { "type": "string" },
+        "dietaryType": { "type": "string" },
+        "calories": { "type": "number" },
+        "meals": {
+          "type": "object",
+          "properties": {
+            "breakfast": { "type": "string" },
+            "lunch": { "type": "string" },
+            "dinner": { "type": "string" },
+            "snacks": { "type": "string" }
+          }
+        },
+        "date": { "type": "string" },
+        "mobileNumber": { "type": "string" }
+      },
+      "required": ["id", "goal", "dietaryType", "calories"]
+    },
+    "AppNotification": {
+      "title": "App Notification",
+      "description": "User notification alerts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "date": { "type": "string" },
+        "read": { "type": "boolean" },
+        "mobileNumber": { "type": "string" }
+      },
+      "required": ["id", "title", "message", "date", "read"]
+    },
+    "Hospital": {
+      "title": "Empaneled Hospital",
+      "description": "Empaneled hospital network node info",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "address": { "type": "string" },
+        "contact": { "type": "string" },
+        "city": { "type": "string" }
+      },
+      "required": ["id", "name", "address", "city"]
+    }
+  },
+  "firestore": {
+    "users": {
+      "schema": "User",
+      "description": "Store registered profiles"
+    },
+    "claims": {
+      "schema": "Claim",
+      "description": "Store OPD claim submissions"
+    },
+    "payments": {
+      "schema": "Payment",
+      "description": "Store Razorpay transaction payments"
+    },
+    "diet_plans": {
+      "schema": "DietPlan",
+      "description": "Store customized calorie targets and meals"
+    },
+    "notifications": {
+      "schema": "AppNotification",
+      "description": "Store system notifications and pushes"
+    },
+    "hospitals": {
+      "schema": "Hospital",
+      "description": "Store empaneled medical facility directories"
+    }
+  }
+}
